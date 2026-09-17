@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "capability_id": "northstar.member.read_savings_balance",
+  "outputs": {
+    "savings_balance": "[REDACTED-SENSITIVE-OUTPUT]"
+  },
+  "outcome": null,
+  "failure": null,
+  "run_id": "replay-ccd0315958"
+}

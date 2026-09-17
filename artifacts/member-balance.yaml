@@ -1,0 +1,71 @@
+schema_version: "1.0"
+capability_id: northstar.member.read_savings_balance
+version: 1.0.0
+title: Read a member's savings balance
+description: Looks up a member and returns the displayed savings available balance without changing account state.
+vendor_app: northstar-core
+compatible_variants: [northstar-core-demo]
+approval: approved
+created_at: 2026-09-17T12:00:00Z
+inputs:
+  member_id:
+    type: string
+    description: Institution-scoped member identifier
+    pattern: "^[0-9]{5}$"
+    sensitive: true
+outputs:
+  savings_balance:
+    type: string
+    description: Currency-formatted available savings balance
+    sensitive: true
+steps:
+  - kind: fill
+    target:
+      strategy: label
+      value: Member number
+      exact: true
+      fallbacks: []
+    value: "{{member_id}}"
+    risk: safe
+    rationale: Label-based targeting survives table/layout changes.
+  - kind: click
+    target:
+      strategy: role_name
+      role: button
+      value: Locate record
+      exact: true
+      fallbacks:
+        - strategy: text
+          value: Locate record
+          exact: true
+          fallbacks: []
+    risk: safe
+    rationale: Unique accessible button name is the primary target.
+  - kind: extract
+    target:
+      strategy: css
+      value: "[aria-label='Savings available balance']"
+      exact: true
+      fallbacks: []
+    output: savings_balance
+    risk: safe
+    rationale: The semantic aria-label is stable even though the legacy table has no test IDs.
+checkpoint:
+  kind: text
+  value: Record loaded
+business_outcomes:
+  - code: MEMBER_NOT_FOUND
+    target:
+      strategy: text
+      value: No member record found
+      exact: true
+      fallbacks: []
+    message: No member exists for the supplied identifier.
+  - code: SESSION_EXPIRED
+    target:
+      strategy: text
+      value: Session expired
+      exact: false
+      fallbacks: []
+    message: The caller must establish a new authenticated session.
+

@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "legacy-ui-capabilities"
+version = "0.1.0"
+description = "LLM discovery to deterministic computer-use capabilities"
+requires-python = ">=3.11"
+dependencies = [
+  "openai>=2.0.0",
+  "playwright>=1.49.0",
+  "pydantic>=2.9.0",
+  "PyYAML>=6.0.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3.0", "pytest-asyncio>=0.24.0"]
+
+[project.scripts]
+hands = "hands.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hands*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
